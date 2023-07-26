@@ -1,6 +1,5 @@
 import keyboard
 import listeners
-import constants
 import util
 import logs
 

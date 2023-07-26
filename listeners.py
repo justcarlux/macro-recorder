@@ -21,68 +21,68 @@ def keyboard_hook_callback(event):
     global last_key_event
 
     if (playing == True): return
-    if (isinstance(event, keyboard.KeyboardEvent)):
+    if (isinstance(event, keyboard.KeyboardEvent) == False): return
 
+    if (
+        (recording == False) and
+        (event.scan_code == keyboard.key_to_scan_codes(constants.RECORD_KEY)[0])
+    ):
+            
+        macro = []
+        macro.append({
+            "name": "started",
+            "event": None,
+            "time": event.time
+        })
+        record_key_released = False
+        recording = True
+        logs.recording_started()
+            
+    elif recording == True:
+
+        if (event.scan_code == keyboard.key_to_scan_codes(constants.STOP_KEY)[0]):
+            recording = False
+            logs.recording_ended()
+            return
+            
         if (
-            (recording == False) and
+            (event.event_type == "up") and
             (event.scan_code == keyboard.key_to_scan_codes(constants.RECORD_KEY)[0])
         ):
+            record_key_released = True
+            return
             
-            macro = []
-            macro.append({
-                "name": "started",
-                "event": None,
-                "time": event.time
-            })
-            record_key_released = False
-            recording = True
-            logs.recording_started()
-            
-        elif recording == True:
-
-            if (event.scan_code == keyboard.key_to_scan_codes(constants.STOP_KEY)[0]):
-                recording = False
-                logs.recording_ended()
-                return
-            
-            if (
-                (event.event_type == "up") and
-                (event.scan_code == keyboard.key_to_scan_codes(constants.RECORD_KEY)[0])
-            ):
-                record_key_released = True
-                return
-            
-            if (
-                (last_key_event) and
-                (last_key_event.scan_code == event.scan_code) and
-                (last_key_event.event_type == event.event_type)
-            ): return
-            
-            data = { "name": event.name, "event_type": event.event_type, "scan_code": event.scan_code }
-            logs.key(data, True)
-            macro.append({
-                "name": "keyboard",
-                "event": data,
-                "time": event.time
-            })
-            last_key_event = event
-
         if (
-            (playing == False) and
-            (recording == False) and
-            (event.event_type == "up") and
-            (event.scan_code == keyboard.key_to_scan_codes(constants.PLAY_KEY)[0])
-        ):
-            if (len(macro) == 1):
-                logs.macro_empty()
-                return
-            logs.playing_started()
-            playing = True
-            play_macro(macro)
-            playing = False
-            util.release_macro_keys(macro)
-            util.release_mouse_buttons()
-            logs.playing_stopped()
+            (last_key_event) and
+            (last_key_event.scan_code == event.scan_code) and
+            (last_key_event.event_type == event.event_type)
+        ): return
+        
+        data = { "name": event.name, "event_type": event.event_type, "scan_code": event.scan_code }
+        logs.key(data, True)
+        macro.append({
+            "name": "keyboard",
+            "event": data,
+            "time": event.time
+        })
+        last_key_event = event
+
+    if (
+        (playing == False) and
+        (recording == False) and
+        (event.event_type == "up") and
+        (event.scan_code == keyboard.key_to_scan_codes(constants.PLAY_KEY)[0])
+    ):
+        if (len(macro) == 1):
+            logs.macro_empty()
+            return
+        logs.playing_started()
+        playing = True
+        play_macro(macro)
+        playing = False
+        util.release_macro_keys(macro)
+        util.release_mouse_buttons()
+        logs.playing_stopped()
         
 def mouse_hook_callback(event):
 
