@@ -2,10 +2,17 @@ import keyboard
 import mouse
 from time import time
 import logs
+import listeners
+import util
 
-def play_macro(macro):
+def play_macro():
 
-    macro_copy = macro.copy()
+    if (len(listeners.macro) < 2):
+        logs.play_macro_empty()
+        return
+    
+    logs.playing_started()
+    macro_copy = listeners.macro.copy()
     started_time = time()
     macro_started_time = macro_copy[0]["time"]
     macro_copy.pop(0)
@@ -38,5 +45,9 @@ def play_macro(macro):
                 case "mouse-wheel":
                     mouse.wheel(event["delta"])
                     logs.mouse_wheel(event, False)
-                
+                    
             macro_copy.pop(0)
+    
+    util.release_macro_keys()
+    util.release_mouse_buttons()
+    logs.playing_stopped()

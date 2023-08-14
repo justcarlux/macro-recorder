@@ -1,12 +1,13 @@
 import keyboard
 import mouse
+import listeners
 
 def clear_all():
     keyboard.unhook_all()
     mouse.unhook_all()
 
-def release_macro_keys(macro):
-    for element in macro:
+def release_macro_keys():
+    for element in listeners.macro:
         if (element["name"] != "keyboard"): continue
         if (keyboard.is_pressed(element["event"]["scan_code"])):
             keyboard.release(element["event"]["scan_code"])

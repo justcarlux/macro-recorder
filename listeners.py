@@ -2,11 +2,12 @@ import keyboard
 import mouse
 import constants
 from play import play_macro
-import util
 import logs
+import save_load
 
 recording = False
 playing = False
+saving_or_loading = False
 macro = []
 
 record_key_released = False
@@ -19,8 +20,10 @@ def keyboard_hook_callback(event):
     global macro
     global playing
     global last_key_event
+    global saving_or_loading
 
     if (playing == True): return
+    if (saving_or_loading == True): return
     if (isinstance(event, keyboard.KeyboardEvent) == False): return
 
     if (
@@ -37,6 +40,24 @@ def keyboard_hook_callback(event):
         record_key_released = False
         recording = True
         logs.recording_started()
+
+    elif (
+        (recording == False) and
+        (event.scan_code == keyboard.key_to_scan_codes(constants.SAVE_KEY)[0]) and
+        (event.event_type == "up")
+    ):
+        saving_or_loading = True
+        save_load.save()
+        saving_or_loading = False
+
+    elif (
+        (recording == False) and
+        (event.scan_code == keyboard.key_to_scan_codes(constants.LOAD_KEY)[0]) and
+        (event.event_type == "up")
+    ):
+        saving_or_loading = True
+        save_load.load()
+        saving_or_loading = False
             
     elif recording == True:
 
@@ -73,16 +94,9 @@ def keyboard_hook_callback(event):
         (event.event_type == "up") and
         (event.scan_code == keyboard.key_to_scan_codes(constants.PLAY_KEY)[0])
     ):
-        if (len(macro) == 1):
-            logs.macro_empty()
-            return
-        logs.playing_started()
         playing = True
-        play_macro(macro)
+        play_macro()
         playing = False
-        util.release_macro_keys(macro)
-        util.release_mouse_buttons()
-        logs.playing_stopped()
         
 def mouse_hook_callback(event):
 
