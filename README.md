@@ -1,8 +1,6 @@
 # ⌨️ Macro Recorder
 
-
-https://github.com/LKxth/macro-recorder/assets/131912633/469616f4-a186-4f46-aaed-f49558a728ed
-
+https://github.com/LKxth/macro-recorder/assets/131912633/51561c4f-e007-46cd-bc15-75cfe3c405d3
 
 Simple console Python program made for recording and playing mouse and keyboard macros.
 
