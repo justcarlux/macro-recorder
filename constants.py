@@ -3,6 +3,7 @@ STOP_KEY = "f10"
 PLAY_KEY = "f5"
 SAVE_KEY = "f1"
 LOAD_KEY = "f3"
+REPEAT_KEY = "f6"
 
 KEYBOARD_TYPES = {
     "down": "Key pressed",

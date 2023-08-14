@@ -12,7 +12,7 @@ def recording_started():
     print(f"Recording started. Press \"{constants.STOP_KEY.upper()}\" to stop.{logging_endline}")
 
 def recording_ended():
-    print(f"{logging_endline}Recording finished. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+    print(f"{logging_endline}Recording finished. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 def play_macro_empty():
     print(f"Nothing to play. Press \"{constants.RECORD_KEY.upper()}\" to start recording or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
@@ -21,7 +21,8 @@ def playing_started():
     print(f"Playing...{logging_endline}")
 
 def playing_stopped():
-    print(f"{logging_endline}Playback finished. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+    repeat = ", repeating..." if listeners.repeat == True else "."
+    print(f"{logging_endline}Playback finished{repeat} Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 def key(event, recording):
     if (logging == False): return
@@ -52,10 +53,10 @@ def save_macro_empty():
     print(f"Nothing to save. Press \"{constants.RECORD_KEY.upper()}\" to start recording.")
 
 def error_saving_macro(ex):
-    print(f"An error ocurred when saving the macro file: {str(ex)}. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+    print(f"An error ocurred when saving the macro file: {str(ex)}. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 def saved_macro():
-    print(f"Your macro has been saved. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+    print(f"Your macro has been saved. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 LOAD_PROMPT = "Write the name of the macro you want to load: "
 
@@ -63,13 +64,17 @@ def load_unexistent_macro():
     if (len(listeners.macro) < 2):
         print(f"There is not a macro with that name. Press \"{constants.RECORD_KEY.upper()}\" to start recording or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
     else:
-        print(f"There is not a macro with that name. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+        print(f"There is not a macro with that name. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 def load_macro_error(ex):
     if (len(listeners.macro) < 2):
         print(f"An error ocurred when loading the macro file: {str(ex)}. Press \"{constants.RECORD_KEY.upper()}\" to start recording or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
     else:
-        print(f"An error ocurred when loading the macro file: {str(ex)}. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+        print(f"An error ocurred when loading the macro file: {str(ex)}. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
 
 def loaded_macro(name):
-    print(f"Macro \"{name}\" has been loaded. Press \"{constants.PLAY_KEY.upper()}\" to play, \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+    print(f"Macro \"{name}\" has been loaded. Press \"{constants.PLAY_KEY.upper()}\" to play (use \"{constants.REPEAT_KEY.upper()}\" to toggle playback repeat), \"{constants.RECORD_KEY.upper()}\" to record again, \"{constants.SAVE_KEY.upper()}\" to save or \"{constants.LOAD_KEY.upper()}\" to load a previously saved macro.")
+
+def repeat_toggled():
+    type = "enabled" if listeners.repeat == True else "disabled"
+    print(f"Playback repeat has been {type}.")

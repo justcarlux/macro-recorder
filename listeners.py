@@ -9,6 +9,7 @@ recording = False
 playing = False
 saving_or_loading = False
 macro = []
+repeat = False
 
 record_key_released = False
 last_key_event = None
@@ -21,10 +22,20 @@ def keyboard_hook_callback(event):
     global playing
     global last_key_event
     global saving_or_loading
+    global repeat
 
-    if (playing == True): return
     if (saving_or_loading == True): return
     if (isinstance(event, keyboard.KeyboardEvent) == False): return
+
+    if (
+        (recording == False) and
+        (event.scan_code == keyboard.key_to_scan_codes(constants.REPEAT_KEY)[0]) and
+        (event.event_type == "up")
+    ):
+        repeat = not repeat
+        logs.repeat_toggled()
+
+    if (playing == True): return
 
     if (
         (recording == False) and
@@ -94,9 +105,7 @@ def keyboard_hook_callback(event):
         (event.event_type == "up") and
         (event.scan_code == keyboard.key_to_scan_codes(constants.PLAY_KEY)[0])
     ):
-        playing = True
         play_macro()
-        playing = False
         
 def mouse_hook_callback(event):
 

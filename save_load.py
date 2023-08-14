@@ -3,7 +3,6 @@ import os
 import re
 import logs
 import json
-import sys
 
 def init_saves_folder():
     if (os.path.exists("saves") == False):
@@ -11,7 +10,6 @@ def init_saves_folder():
 
 save_regex = re.compile(r"[a-zA-Z0-9]", flags=re.IGNORECASE)
 def save():
-
     if (len(listeners.macro) < 2):
         logs.save_macro_empty()
         return
